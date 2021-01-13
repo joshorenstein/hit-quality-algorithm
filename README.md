@@ -3,4 +3,4 @@ This hit quality algorithm categorizes MLB contacts into 7 different types based
 
 See the results section to see estimated batting average and woba for the 7 different hit types
 
-![Final Model Plot](https://github.com/joshorenstein/hit-quality-algorithm/blob/main/final_model_plot.pdf?raw=true)
+![Hit Quality Model](https://github.com/joshorenstein/hit-quality-algorithm/blob/main/final_model_plot.png)
