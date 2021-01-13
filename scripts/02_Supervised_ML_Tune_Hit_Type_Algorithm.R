@@ -1,4 +1,5 @@
-Packages <- c("tidyverse","here", "caret", "rpartScore", "recipes","MASS","kernlab","naivebayes","yardstick")
+library(tidyverse)
+Packages <- c("here", "caret", "rpartScore", "recipes","MASS","kernlab","naivebayes","yardstick")
 lapply(Packages, library, character.only = TRUE)
 
 ##load training data if its not loaded already
@@ -21,9 +22,9 @@ ctrl <- trainControl(method = "repeatedcv",number=10,repeats=3,sampling="up",cla
                      summaryFunction = multiClassSummary,
                      savePredictions = "final",allowParallel = TRUE)
 
-########Fit 4 models######## 
+########Fit 4 models#########
 ########Naive Bayes, Regression Tree, Bagged Regression Trees and Support Vector Machine########
-
+ 
 class_nb <- train(hit_recipe, data = training, method = "naive_bayes",  trControl = ctrl,metric="logLoss") #bayesian
 class_cart <- train(hit_recipe, data = training, method = "rpart2",  trControl = ctrl,metric="logLoss") #regression tree 
 class_tree_b <- train(hit_recipe, data = training, method = "treebag",  trControl = ctrl,metric="logLoss") #bagged regression tree
@@ -78,6 +79,20 @@ naive_bayes_summary <- testing_results %>%
   dplyr::summarise(launch_speed=mean(launch_speed),launch_angle=mean(launch_angle),est_ba=mean(estimated_ba_using_speedangle),est_woba=mean(estimated_woba_using_speedangle))
 
 naive_bayes_summary
+a <- ggplot(testing_results, aes(x = launch_speed,y=launch_angle, 
+                                color = hit_types)) +
+  geom_point(size = 1, alpha=0.5,position="jitter") +
+  labs(title = "Naive Bayes Classification of Launch Speed vs Launch Angle",
+       subtitle = "7 classes assigned",
+       caption = "Data Source: Statcast",
+       x = "Launch Speed (MPH)", y = "Launch Angle (deg)", color = "Hit Type")+
+  scale_color_discrete(labels=c("Fliner","Hard Air Contact","Hard Ground Contact",
+                                "High Fly","Soft Air Contact","Soft Ground Contact",
+                                "Pop up")) +
+  theme(legend.key.size = unit(3,"point"))
+
+a
+ggsave("final_model_plot.pdf", width = 6, height = 4)
 naive_bayes_summary %>% write_csv("results/naive_bayes_summarized_results.csv")
 
 

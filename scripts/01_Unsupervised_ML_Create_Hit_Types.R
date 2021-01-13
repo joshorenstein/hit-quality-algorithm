@@ -49,7 +49,23 @@ lookup <- data.frame(hit_type_index,hit_types)
 hit_data_final <- hit_data_updated %>% inner_join(lookup,by=c("data.hclust.clusters"="hit_type_index"))
 hit_data_final$hit_types <- as.factor(hit_data_final$hit_types)
 head(hit_data_final)
+
+# Plot of Speed vs. Angle by cluster membership
+#install.packages('ggthemes')
+library(ggthemes)
+z <- ggplot(hit_data_final, aes(x = launch_speed,y=launch_angle, 
+                           color = hit_types)) +
+  geom_point(size = 1, alpha=0.5,position="jitter") +
+  labs(title = "Hierarchical Clustering of Launch Speed vs Launch Angle",
+       subtitle = "7 clusters assigned",
+       caption = "Data Source: Statcast",
+       x = "Launch Speed (MPH)", y = "Launch Angle (deg)", color = "Hit Type")+
+  scale_color_discrete(labels=c("Fliner","Hard Air Contact","Hard Ground Contact",
+                                "High Fly","Soft Air Contact","Soft Ground Contact",
+                                "Pop up")) +
+  theme(legend.key.size = unit(3,"point"))
+z
+ggsave("model_performance/unsupervised_plot.pdf", width = 6, height = 4)
 #Save the data
 hit_data_final %>% write_csv("data/unsupervised_results.csv") 
-
 
