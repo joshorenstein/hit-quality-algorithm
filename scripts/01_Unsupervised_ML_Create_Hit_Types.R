@@ -1,4 +1,4 @@
-####Unsupervised Machine Learning to Identify Hit Type####
+#####Unsupervised Machine Learning to Identify Hit Type####
 ##################Hierarchical clustering#################
 library(tidyverse)
 library(here)
@@ -7,7 +7,7 @@ s$estimated_ba_using_speedangle <- as.numeric(s$estimated_ba_using_speedangle)
 s$estimated_woba_using_speedangle <- as.numeric(s$estimated_woba_using_speedangle)
 hit_data <- s %>% na.omit() #remove any data without hit data
 summary(hit_data)
-View(hit_data)
+
 # Convert the features of the data
 test.data <- as.matrix(hit_data[5:6])
 
